@@ -1,9 +1,31 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import logo from './logo.svg';
 import { Counter } from './features/counter/Counter';
 import './App.css';
 
+
+
 function App() {
+  
+  useEffect(() => {
+    console.log('mounted')
+    callBackEndAPI();
+    return () => {
+      console.log('unmounted');
+    }
+    
+  });
+  
+  // callBackEndAPI = async () => {
+  //   const response = await fetch('/backend');
+  //   const body = await response.json();
+  //   return body;
+  // };
+  async function callBackEndAPI() {
+    const response = await fetch('/backend');
+    const body = await response.json();
+    return body;
+  };
   return (
     <div className="App">
       <header className="App-header">

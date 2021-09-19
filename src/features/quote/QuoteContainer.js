@@ -1,9 +1,12 @@
 import { useState, useEffect } from 'react';
 import { getRandomArbitrary } from '../../app/utils/randomNum';
+import { CSSTransition } from 'react-transition-group' ;
+import SocialSharing from '../social-sharing/SocialSharing';
 
 export function QuoteContainer() {
     const [quote, setQuote] = useState('you give what you get');
     const [author, setAuthor] = useState(`c'est moi`);
+    const [quoteVisibility, setQuoteVisibility] = useState(true)
 
     const buttonStyle = {
         display: 'block',
@@ -12,13 +15,13 @@ export function QuoteContainer() {
         color: 'white'
     }
     const handleFocus = (evt) => {
-        if (!author) return 
-        evt.target.innerText = author;
-        
+        if (!author) return;
+        setQuoteVisibility(false);
 
     }   
     const handleUnfocus = (evt) => {
-        evt.target.innerText = quote;
+        if (!quote) return;
+        setQuoteVisibility(true);
     }
     const sectionStyle = {
         display: 'flex',
@@ -42,9 +45,20 @@ export function QuoteContainer() {
 
     return (
         <section style={sectionStyle}>
-            <h1 className='currentQuote' onMouseEnter={handleFocus} onMouseLeave={handleUnfocus} >{quote}</h1>
-            
+            <div onMouseEnter={handleFocus} onMouseLeave={handleUnfocus}>
+            {quoteVisibility ? 
+                <h1 className='currentQuote'>{quote}</h1> :
+            <CSSTransition 
+                onEnter={handleFocus}
+                timeout={200}
+                classNames="fade-appear"
+
+            >
+                <h3>{author}</h3></CSSTransition>
+            }
+            </div>
             <button style={buttonStyle} onClick={callAPI}>Get New Quote</button>
+            <SocialSharing />
         </section>
     ) 
 }
